@@ -1,4 +1,4 @@
-import React from 'react'; # 리액트를 불러와서 사용할 수 있게 해줌
+import React from './node_modules/react'; # 리액트를 불러와서 사용할 수 있게 해줌
 import logo from './logo.svg'; #SVG파일을 import하는 코드
 import './App.css'; #CSS파일을 import하는코드 
 

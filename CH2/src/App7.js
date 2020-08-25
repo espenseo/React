@@ -1,4 +1,4 @@
-import React from 'react';
+import React from './node_modules/react';
  
 function App() {
   const name = '뤼왝트';
