@@ -19,13 +19,13 @@ handleChange = (e) => {
 
 
 
-handleButtonClick => () => {
+  handleButtonClick = () => {
     this.setState({
       clicked: true,
-      validated: this.state.password === ‘0000‘
-    })
+      validated: this.state.password === '0000'
+    });
+    this.input.focus();
   }
-
 
 
 render() {
