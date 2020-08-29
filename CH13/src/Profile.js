@@ -1,10 +1,14 @@
 import React from 'react';
-import { Link, Route } from 'react-router-dom';
-import Profile from './Profile';
+import { withRouter } from ‘react-router-dom‘;
 import WithRouterSample from ‘./WithRouterSample‘;
  
-const Profiles = () => {
-  return (
+const Profile = ({ match }) => {
+    const { username } = match.params;
+    const profile = data[username];
+    if (!profile) {
+      return <div>존재하지 않는 사용자입니다.</div>;
+    }
+    return (
     <div>
       <h3>사용자 목록:</h3>
       <ul>
@@ -27,4 +31,4 @@ const Profiles = () => {
   );
 };
  
-export default Profiles;
+export default withRouter(Profile);
