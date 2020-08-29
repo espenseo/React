@@ -1,4 +1,5 @@
 import React, { useRef, useCallback, useState } from ‘react‘;
+import produce from ‘immer‘;
 
 
 const App = () => {
@@ -15,10 +16,11 @@ const App = () => {
   const onChange = useCallback(
     e => {
       const { name, value } = e.target;
-      setForm({
-        …form,
-        [name]: [value]
-      });
+      setForm(
+        produce(form, draft => {
+          draft[name] = value;
+        })
+      );
     },
     [form]
   );
@@ -38,14 +40,11 @@ const App = () => {
 
 
   <span class="co44">// array</span><span class="co44">에</span> <span class="co44">새</span> <span class="co44">항목</span> <span class="co44">등록</span>
-  <span class="co47">setData</span><span class="co33">({</span>
-    <span class="co35">...</span><span class="co33">data,</span>
-
-
-        array: data.array.concat(info)
-      });
-
-
+  <span class="co47">setData</span><span class="co33">(</span>
+    <span class="cd2 co47">produce</span><span class="cd2 co33">(data,</span> <span class="cd2 co33">draft</span> <span class="cd2 co46">=&gt;</span> <span class="cd2 co33">{</span>
+      <span class="cd2 co34">draft</span><span class="cd2 co33">.</span><span class="cd2 co34">array</span><span class="cd2 co33">.</span><span class="cd2 co47">push</span><span class="cd2 co33">(info);</span>
+    <span class="cd2 co33">})</span>
+  <span class="co33">);</span>
 
   <span class="co44">// form </span><span class="co44">초기화</span>
   <span class="co47">setForm</span><span class="co33">({</span>
@@ -64,10 +63,11 @@ const App = () => {
 // 항목을 삭제하는 함수
   const onRemove = useCallback(
     id => {
-      setData({
-        …data,
-        array: data.array.filter(info => info.id != = id)
-      });
+      setData(
+        produce(data, draft => {
+          draft.array.splice(draft.array.findIndex(info => info.id === id), 1);
+        })
+      );
     },
     [data]
   );
