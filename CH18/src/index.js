@@ -6,9 +6,10 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import rootReducer from './modules';
+import loggerMiddleware from './lib/loggerMiddleware';
 
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(loggerMiddleware));
 
 
 
