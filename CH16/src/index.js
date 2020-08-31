@@ -16,6 +16,8 @@ const render = () => {
 
 
 render();
+store.subscribe(render);
+
 const divToggle = document.querySelector(‘.toggle‘);
 const counter = document.querySelector(‘h1‘);
 const btnIncrease = document.querySelector(‘#id‘);
