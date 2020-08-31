@@ -31,7 +31,7 @@ const Todos = ({
   const onSubmit = e => {
     e.preventDefault();
     onInsert(input);
-    onChangeInput(“); // 등록 후 인풋 초기화
+    onChangeInput(''); // 등록 후 인풋 초기화
   };
   const onChange = e => onChangeInput(e.target.value);
   return (
