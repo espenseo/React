@@ -1,5 +1,5 @@
 import { createAction, handleActions } from 'redux-actions';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import {  delay, put, takeEvery, takeLatest, select } from 'redux-saga/effects';
 import * as api from '../lib/api';
 import createRequestSaga from '../lib/createRequestSaga';
 
@@ -29,7 +29,12 @@ export function* sampleSaga() {
   yield takeLatest(GET_USERS, getUsersSaga);
 }
 
-
+function* increaseSaga() {
+    yield delay(1000); // 1초를 기다립니다.
+    yield put(increase()); // 특정 액션을 디스패치합니다.
+    const number = yield select(state => state.counter); // state는 스토어 상태를 의미함
+    console.log(</span><span class="co31">현재</span> <span class="co31">값은</span> <span class="co49">${</span><span class="co33">number</span><span class="co49">}</span><span class="co31">입니다</span><span class="co31">.</span><span class="co31">);
+  }
 
 // 초기 상태를 선언합니다.
 // 요청의 로딩 중 상태는 loading이라는 객체에서 관리합니다.
