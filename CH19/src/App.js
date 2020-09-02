@@ -1,9 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-
-const SplitMe = React.lazy(() => import(‘./SplitMe‘));
+import loadable from '@loadable/component';
+const SplitMe = loadable(() => import('./SplitMe'));
 
 
 function App() {
@@ -16,9 +15,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p onClick={onClick}>Hello React!</p>
-        <Suspense fallback={<div>loading…</div>}>
           {visible && <SplitMe />}
-        </Suspense>
       </header>
     </div>
   );
