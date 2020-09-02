@@ -2,7 +2,9 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import loadable from '@loadable/component';
-const SplitMe = loadable(() => import('./SplitMe'));
+const SplitMe = loadable(() => import('./SplitMe'));{
+    fallback: <div>loading…</div>
+  });
 
 
 function App() {
