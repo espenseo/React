@@ -1,13 +1,16 @@
+const nodeExternals = require('webpack-node-externals');
 const paths = require('./paths');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
-const nodeExternals = require('webpack-node-externals');
+const webpack = require('webpack');
+const getClientEnvironment = require('./env');
 
-const cssRegex = /.css$/;
-const cssModuleRegex = /.module.css$/;
-const sassRegex = /.(scss|sass)$/;
-const sassModuleRegex = /.module.(scss|sass)$/;
+const cssRegex = /\.css$/;
+const cssModuleRegex = /\.module\.css$/;
+const sassRegex = /\.(scss|sass)$/;
+const sassModuleRegex = /\.module\.(scss|sass)$/;
 
-
+const publicUrl = paths.servedPath.slice(0, -1);
+const env = getClientEnvironment(publicUrl);
 
 module.exports = {
   mode: 'production', // 프로덕션 모드로 설정하여 최적화 옵션들을 활성화
@@ -29,5 +32,8 @@ module.exports = {
   resolve: {
     modules: ['node_modules']
   },
-  externals: [nodeExternals()]
+  externals: [nodeExternals()],
+  plugins: [
+    new webpack.DefinePlugin(env.stringified) // 환경변수를 주입해 줍니다.
+  ]
 };
