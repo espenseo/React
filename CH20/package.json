@@ -137,8 +137,11 @@
       ]
     },
     "babel": {
-      "presets": [
-        "react-app"
-      ]
-    }
+        "presets": [
+          "react-app"
+        ],
+        "plugins": [
+          "@loadable/babel-plugin"
+        ]
+      }
   }
