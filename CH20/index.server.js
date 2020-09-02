@@ -3,6 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import express from 'express';
 import { StaticRouter } from 'react-router-dom';
 import App from './App';
+import path from 'path';
 
 
 const app = express();
@@ -26,12 +27,18 @@ const context = {};
 };
 
 
-
-app.use(serverRender);
-
-
-
-// 5000 포트로 서버를 가동합니다.
-app.listen(5000, () => {
-  console.log('Running on http://localhost:5000');
-});
+const serve = express.static(path.resolve('./build'), {
+    index: false // “/” 경로에서 index.html을 보여 주지 않도록 설정
+  });
+  
+  
+  
+  app.use(serve); // 순서가 중요합니다. serverRender 전에 위치해야 합니다.
+  app.use(serverRender);
+  
+  
+  
+  // 5000 포트로 서버를 가동합니다.
+  app.listen(5000, () => {
+    console.log('Running on http://localhost:5000');
+  });
