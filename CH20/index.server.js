@@ -26,31 +26,32 @@ const chunks = Object.keys(manifest.files)
 
 
 
-function createPage(root) {
-  return &lt;!DOCTYPE html&gt;</span>
-<span class="cd2 co31">  &lt;html lang=</span><span class="cd2 co31">"</span><span class="cd2 co31">en</span><span class="cd2 co31">"</span><span class="cd2 co31">&gt;</span>
-<span class="cd2 co31">  &lt;head&gt;</span>
-<span class="cd2 co31">    &lt;meta charset=</span><span class="cd2 co31">"</span><span class="cd2 co31">utf-8</span><span class="cd2 co31">"</span><span class="cd2 co31"> /&gt;</span>
-<span class="cd2 co31">    &lt;link rel=</span><span class="cd2 co31">"</span><span class="cd2 co31">shortcut icon</span><span class="cd2 co31">"</span><span class="cd2 co31"> href=</span><span class="cd2 co31">"</span><span class="cd2 co31">/favicon.ico</span><span class="cd2 co31">"</span><span class="cd2 co31"> /&gt;</span>
-<span class="cd2 co31">    &lt;meta</span>
-<span class="cd2 co31">      name=</span><span class="cd2 co31">"</span><span class="cd2 co31">viewport</span><span class="cd2 co31">"</span>
-<span class="cd2 co31">      content=</span><span class="cd2 co31">"</span><span class="cd2 co31">width=device-width,initial-scale=1,shrink-to-fit=no</span><span class="cd2 co31">"</span>
-<span class="cd2 co31">    /&gt;</span>
-<span class="cd2 co31">    &lt;meta name=</span><span class="cd2 co31">"</span><span class="cd2 co31">theme-color</span><span class="cd2 co31">"</span><span class="cd2 co31"> content=</span><span class="cd2 co31">"</span><span class="cd2 co31">#000000</span><span class="cd2 co31">"</span><span class="cd2 co31"> /&gt;</span>
-<span class="cd2 co31">    &lt;title&gt;React App&lt;/title&gt;</span>
-<span class="cd2 co31">    &lt;link href=</span><span class="cd2 co31">"</span><span class="co49">${</span><span class="cd2 co33">manifest[</span><span class="cd2 co31">'</span><span class="cd2 co31">main.css</span><span class="cd2 co31">'</span><span class="cd2 co33">]</span><span class="co49">}</span><span class="cd2 co31">"</span><span class="cd2 co31"> rel=</span><span class="cd2 co31">"</span><span class="cd2 co31">stylesheet</span><span class="cd2 co31">"</span><span class="cd2 co31"> /&gt;</span>
-<span class="cd2 co31">  &lt;/head&gt;</span>
-<span class="cd2 co31">  &lt;body&gt;</span>
-<span class="cd2 co31">    &lt;noscript&gt;You need to enable JavaScript to run this app.&lt;/noscript&gt;</span>
-<span class="cd2 co31">    &lt;div id=</span><span class="cd2 co31">"</span><span class="cd2 co31">root</span><span class="cd2 co31">"</span><span class="cd2 co31">&gt;</span>
-<span class="cd2 co31">      </span><span class="co49">${</span><span class="cd2 co34">root</span><span class="co49">}</span>
-<span class="cd2 co31">    &lt;/div&gt;</span>
-<span class="cd2 co31">    &lt;script src=</span><span class="cd2 co31">"</span><span class="co49">${</span><span class="cd2 co33">manifest[</span><span class="cd2 co31">'</span><span class="cd2 co31">runtime~main.js</span><span class="cd2 co31">'</span><span class="cd2 co33">]</span><span class="co49">}</span><span class="cd2 co31">"</span><span class="cd2 co31">&gt;&lt;/script&gt;</span>
-<span class="cd2 co31">    </span><span class="co49">${</span><span class="cd2 co33">chunks</span><span class="co49">}</span>
-<span class="cd2 co31">    &lt;script src=</span><span class="cd2 co31">"</span><span class="co49">${</span><span class="cd2 co33">manifest[</span><span class="cd2 co31">'</span><span class="cd2 co31">main.js</span><span class="cd2 co31">'</span><span class="cd2 co33">]</span><span class="co49">}</span><span class="cd2 co31">"</span><span class="cd2 co31">&gt;&lt;/script&gt;</span>
-<span class="cd2 co31">  &lt;/body&gt;</span>
-<span class="cd2 co31">  &lt;/html&gt;</span>
-<span class="cd2 co31">;
+  function createPage(root, stateScript) {
+  return '<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="utf-8" />
+      <link rel="shortcut icon" href="/favicon.ico"/>
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      />
+      <meta name="theme-color" content="#000000"/>
+      <title>React App</title>
+      <link href="${maifest['main.css']}" rel="stylesheet"/>
+    </head>
+    <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+        ${root}
+    </div>
+    ${stateScript}
+    <script src="${manifest['runtime-main.js']}"></script>
+    ${chunks}
+    <script src="${manifest['main.js']}"></script>
+    </body>
+    </html>
+        ';
 }
 const app = express();
 
@@ -91,7 +92,14 @@ ReactDOMServer.renderToStaticMarkup(jsx); // renderToStaticMarkup으로 한번 �
   }
   preloadContext.done = true;
   const root = ReactDOMServer.renderToString(jsx); // 렌더링을 합니다.
-  res.send(createPage(root)); // 결과물을 응답합니다.
+  // JSON을 문자열로 변환하고 악성 스크립트가 실행되는 것을 방지하기 위해 <를 치환 처리
+  // https://redux.js.org/recipes/server-rendering#security-considerations
+  const stateString = JSON.stringify(store.getState()).replace(/</g, '\\u003c');
+  const stateScript = '<script>__PRELOADED_STATE__=${stateString}</script>'; // 리덕스 초기 상태를 스크립트로 주입합니다.
+
+
+
+res.send(createPage(root, stateScript)); // 결과물을 응답합니다.
 };
 
 
