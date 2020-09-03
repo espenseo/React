@@ -9,10 +9,10 @@ app.use((ctx, next) => {
     if (ctx.query.authorized !== '1') {
         ctx.status = 401; // Unauthorized
         return;
-        next().then(() => {
-            console.log('END');
-          });
-        });
+    }
+    await next();
+    console.log('END');
+  });
   
   
   
