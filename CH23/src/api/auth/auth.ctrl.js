@@ -135,3 +135,7 @@ export const logout = async ctx => {
       ctx.throw(500, e);
     }
   };
+
+  export const read = ctx => {
+    ctx.body = ctx.state.post;
+  };
