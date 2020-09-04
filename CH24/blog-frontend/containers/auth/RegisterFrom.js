@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { changeField, initializeForm, register } from '../../modules/auth';
 import AuthForm from '../../components/auth/AuthForm';
@@ -32,12 +32,20 @@ const RegisterForm = () => {
 const onSubmit = e => {
     e.preventDefault();
     const { username, password, passwordConfirm } = form;
-    if (password !== passwordConfirm) {
-      // TODO: 오류 처리
-      return;
-    }
-    dispatch(register({ username, password }));
-  };
+    // 하나라도 비어 있다면
+    if ([username, password, passwordConfirm].includes('')) {
+        setError('빈 칸을 모두 입력하세요.');
+        return;
+      }
+      // 비밀번호가 일치하지 않는다면
+      if (password !== passwordConfirm) {
+        setError('비밀번호가 일치하지 않습니다.');
+        changeField({ form: 'register', key: 'password', value: '' });
+        changeField({ form: 'register', key: 'passwordConfirm', value: '' });
+        return;
+      }
+      dispatch(register({ username, password }));
+    };
 
 
 
@@ -49,8 +57,13 @@ const onSubmit = e => {
 // 회원가입 성공/실패 처리
 useEffect(() => {
     if (authError) {
-      console.log('오류 발생');
-      console.log(authError);
+      // 계정명이 이미 존재할 때
+      if (authError.response.status === 409) {
+        setError('이미 존재하는 계정명입니다.');
+        return;
+      }
+      // 기타 이유
+      setError('회원가입 실패');
       return;
     }
     if (auth) {
