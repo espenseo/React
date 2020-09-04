@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import Responsive from './Responsive';
 import Button from './Button';
+import { Link } from 'react-router-dom';
 
 const HeaderBlock = styled.div`
   position: fixed;
@@ -42,29 +42,22 @@ const UserInfo = styled.div`
   margin-right: 1rem;
 `;
 
-const Header = ({ user, onLogout }) => {
-  return (
-    <>
-      <HeaderBlock>
-        <Wrapper>
-          <Link to="/" className="logo">
-            REACTERS
-          </Link>
-          {user ? (
-            <div className="right">
-              <UserInfo>{user.username}</UserInfo>
-              <Button onClick={onLogout}>로그아웃</Button>
-            </div>
-          ) : (
+const Header = () => {
+    return (
+      <>
+        <HeaderBlock>
+          <Wrapper>
+            <Link to="/" className="logo">
+              REACTERS
+            </Link>
             <div className="right">
               <Button to="/login">로그인</Button>
             </div>
-          )}
-        </Wrapper>
-      </HeaderBlock>
-      <Spacer />
-    </>
-  );
-};
-
-export default Header;
+          </Wrapper>
+        </HeaderBlock>
+        <Spacer />
+      </>
+    );
+  };
+  
+  export default Header;
