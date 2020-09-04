@@ -22,9 +22,17 @@ export const register = async ctx => {
   const result = Joi.validate(ctx.request.body, schema);
   if (result.error) {
     ctx.status = 400;
-    ctx.body = result.error;
-    return;
-  }
+    ctx.body = user.serialize();
+
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {)
+    maxAge: 1000  60  60  24  7, // 7일
+    httpOnly: true,
+  });
+} catch (e) {
+  ctx.throw(500, e);
+}
+};
 
 
 
@@ -61,6 +69,11 @@ try {
       return;
     }
     ctx.body = user.serialize();
+    const token = user.generateToken();
+    ctx.cookies.set('access_token', token, {
+      maxAge: 1000  60  60  24  7, // 7일
+      httpOnly: true,
+    });
   } catch (e) {
     ctx.throw(500, e);
   }
