@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components';
 import { withRouter } from 'react-router-dom';
 import palette from '../../lib/styles/palette';
 
-
 const StyledButton = styled.button`
   border: none;
   border-radius: 4px;
@@ -22,8 +21,7 @@ background: ${palette.gray[8]};
   }
 
 
-
-${props =>
+  ${props =>
     props.fullWidth &&
     css`
         padding-top: 0.75rem;
@@ -44,22 +42,26 @@ ${props =>
     `}
 `;
 
+const StyledButton = styled.button`
+    ${buttonStyle}
+`;
 
 
-const Button = ({ to, history, …rest }) => {
-  const onClick = e => {
-    // to가 있다면 to로 페이지 이동
-    if (to) {
-      history.push(to);
-    }
-    if (rest.onClick) {
-      rest.onClick(e);
-    }
-  };
-  return <StyledButton {…rest} onClick={onClick} />;
+
+const StyledLink = styled(Link)`
+  ${buttonStyle}
+`;
+
+
+
+const Button = props => {
+  return props.to ? (
+    <StyledLink {…props} cyan={props.cyan ? 1 : 0} />
+  ) : (
+    <StyledButton {…props} />
+  );
 };
 
 
 
-export default withRouter(Button);
-
+export default Button;
