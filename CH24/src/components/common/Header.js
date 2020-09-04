@@ -42,7 +42,7 @@ const UserInfo = styled.div`
   margin-right: 1rem;
 `;
 
-const Header = () => {
+const Header = ({user}) => {
     return (
       <>
         <HeaderBlock>
@@ -50,9 +50,16 @@ const Header = () => {
             <Link to="/" className="logo">
               REACTERS
             </Link>
+            {user ? (
+            <div className="right">
+              <UserInfo>{user.username}</UserInfo>
+              <Button>로그아웃</Button>
+            </div>
+          ) : (
             <div className="right">
               <Button to="/login">로그인</Button>
             </div>
+          )}
           </Wrapper>
         </HeaderBlock>
         <Spacer />
