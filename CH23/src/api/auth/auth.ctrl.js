@@ -99,3 +99,19 @@ export const logout = async ctx => {
     ctx.cookies.set('access_token');
     ctx.status = 204; // No Content
   };
+
+  export const write = async ctx => {
+   const { title, body, tags } = ctx.request.body;
+    const post = new Post({
+      title,
+      body,
+      tags,
+      user: ctx.state.user,
+    });
+    try {
+      await post.save();
+      ctx.body = post;
+    } catch (e) {
+      ctx.throw(500, e);
+    }
+  };
