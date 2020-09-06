@@ -45,7 +45,6 @@ const PostViewer = ({ post, error, loading, actionButtons, ownPost }) => {
       <Helmet>
         <title>{title} - REACTERS</title>
       </Helmet>
-
       <PostHead>
         <h1>{title}</h1>
         <SubInfo
